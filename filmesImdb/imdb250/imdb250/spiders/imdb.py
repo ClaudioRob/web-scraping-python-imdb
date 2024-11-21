@@ -1,5 +1,6 @@
 import scrapy
 import json
+from imdb250.items import Info
 
 class ImdbSpider(scrapy.Spider):
     name = "imdb"
@@ -14,15 +15,18 @@ class ImdbSpider(scrapy.Spider):
 
         need_data = json_data['props']['pageProps']['pageData']['chartTitles']['edges']
 
+        information = Info()
+
         for movie in need_data:
-            yield{
-                'title': movie['node']['titleText']['text'],
-                'movie_rank': movie['currentRank'],
-                'release_yaer': movie['node']['releaseYear']['year'],
-                'movie_length': movie['node']['runtime']['seconds'],
-                'rating': movie['node']['ratingsSummary']['aggregateRating'],
-                'vote_count': movie['node']['ratingsSummary']['voteCount'],
-                'description': movie['node']['plot']['plotText']['plainText']
-            }
+                
+                information['title'] = movie['node']['titleText']['text'],
+                information['movie_rank'] = movie['currentRank'],
+                information['release_yaer'] = movie['node']['releaseYear']['year'],
+                information['movie_length'] = movie['node']['runtime']['seconds'],
+                information['rating'] = movie['node']['ratingsSummary']['aggregateRating'],
+                information['vote_count'] = movie['node']['ratingsSummary']['voteCount'],
+                information['description'] = movie['node']['plot']['plotText']['plainText']
+
+                yield information
                                                     
         pass
